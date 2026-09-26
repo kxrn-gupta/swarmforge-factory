@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+runs/
+.pytest_cache/
+.coverage
+htmlcov/
+*.swp
+.env
+*.local
+publish.ps1
+publish.bat
