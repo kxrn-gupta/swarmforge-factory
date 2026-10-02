@@ -12,7 +12,32 @@ In modern manufacturing, a *Dark Factory* runs fully automated with zero human p
 - **Lights-Out Synthesis:** Provide a high-level requirement, and the supervisor decomposes it into a multi-stage dependency DAG.
 - **Parallel Assembly Lines:** Heterogeneous worker agents build independent subsystems simultaneously in staged waves.
 - **Automated Quality Control (QA):** An adversarial reviewer scrutinizes ASTs, syntax, and exit codes, triggering self-healing fixer agents automatically.
-- **BAND Collaboration Audit Log:** Seamlessly integrates with team collaboration rooms (e.g. BAND app) for real-time progress logging and verifiable development trails.
+- **BAND Collaboration Audit Log:** Seamlessly integrates with team collaboration rooms (e.g. BAND Desktop / `band_room_export.json`) for real-time progress logging and verifiable development trails.
+
+---
+
+## 🏛️ BAND Desktop Integration & 4-Stage Hierarchy
+
+SwarmForge is fully compliant with the **BAND Hacker Guide**, featuring 3 standing agent seat mandates and 4 standalone buildable stages:
+
+### 📄 Standing Seat Mandates
+* **Seat 1 (Architect / Planner):** [`mandates/01_architect.md`](mandates/01_architect.md) — Room ownership, DAG decomposition & stage gating.
+* **Seat 2 (Lead Implementer):** [`mandates/02_builder.md`](mandates/02_builder.md) — Clean-room parallel code implementation in Python stdlib.
+* **Seat 3 (QA Verifier & Healer):** [`mandates/03_verifier.md`](mandates/03_verifier.md) — AST syntax/diff inspection, test enforcement & self-healing.
+
+### 🧱 4 Complete Buildable Stages
+| Stage | Focus & Deliverable | Directory | Status |
+| :--- | :--- | :--- | :--- |
+| **Stage 1** | Foundation, Schema Validation & State Models | [`stage-1/`](stage-1/) | 🟢 Certified (3/3 Tests) |
+| **Stage 2** | Autonomous DAG Wave Scheduler (Kahn's Algorithm) | [`stage-2/`](stage-2/) | 🟢 Certified (3/3 Tests) |
+| **Stage 3** | Self-Healing QA Engine & AST Diff Verifier | [`stage-3/`](stage-3/) | 🟢 Certified (4/4 Tests) |
+| **Stage 4** | Production Dark Factory HTTP API & BAND Sync | [`stage-4/`](stage-4/) | 🟢 Certified (1/1 Tests) |
+
+### ⚡ 1-Click Master Test Runner
+Verify all 4 stages simultaneously in under 0.25 seconds:
+```bash
+python tests/run_all_stages.py
+```
 
 
 ---

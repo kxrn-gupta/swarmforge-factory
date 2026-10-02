@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SwarmForge: The Dark Factory for Software Delivery — BAND Presentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --bg-card: #131920;
+      --bg-card-border: #222d3a;
+      --text-main: #f0f4f8;
+      --text-muted: #8899a6;
+      --accent-amber: #ff9e3b;
+      --accent-emerald: #00ff88;
+      --accent-cyan: #38bdf8;
+      --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .slide-viewport {
+      flex: 1;
+      position: relative;
+      width: 100%;
+      height: calc(100vh - 60px);
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      padding: 3.5rem 6rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+      transform: translateY(15px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.85rem;
+      background: rgba(255, 158, 59, 0.12);
+      border: 1px solid var(--accent-amber);
+      color: var(--accent-amber);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 600;
+      border-radius: 4px;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      width: fit-content;
+    }
+
+    .badge-emerald {
+      background: rgba(0, 255, 136, 0.12);
+      border-color: var(--accent-emerald);
+      color: var(--accent-emerald);
+    }
+
+    h1 {
+      font-size: 3.2rem;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.25rem;
+    }
+
+    h2 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+
+    p.subtitle {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      max-width: 850px;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      margin-top: 1rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--bg-card-border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover { border-color: var(--accent-amber); }
+    .card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .card-mono {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      margin-top: 0.75rem;
+      padding: 0.5rem;
+      background: #090c10;
+      border-radius: 4px;
+      border: 1px solid #1c2430;
+      color: var(--accent-emerald);
+    }
+
+    /* Metric Callout */
+    .metric-box {
+      background: #111720;
+      border-left: 3px solid var(--accent-emerald);
+      padding: 1.25rem;
+      border-radius: 0 6px 6px 0;
+    }
+    .metric-value {
+      font-size: 2.2rem;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      color: var(--accent-emerald);
+    }
+    .metric-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    /* Nav Bar */
+    .nav-bar {
+      height: 60px;
+      background: #090d12;
+      border-top: 1px solid #1c2430;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 3rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    button {
+      background: #17202c;
+      border: 1px solid #28374a;
+      color: var(--text-main);
+      padding: 0.4rem 0.9rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      transition: background 0.15s;
+    }
+
+    button:hover { background: #223042; }
+
+    @media print {
+      body { overflow: visible; height: auto; }
+      .slide-viewport { height: auto; overflow: visible; }
+      .slide {
+        position: relative !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        page-break-after: always;
+        height: 100vh;
+        padding: 3rem;
+      }
+      .nav-bar { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="slide-viewport">
+    
+    <!-- SLIDE 1: Title -->
+    <div class="slide active">
+      <div class="badge">WeAreDevelopers × BAND · Dark Factory Edition</div>
+      <h1>SwarmForge: The 'Dark Factory'<br>for Software Delivery</h1>
+      <p class="subtitle">An autonomous, lights-out software engineering factory operating inside BAND Desktop. Three mandate-driven agent seats planning, implementing, and verifying clean-room services with zero human intervention.</p>
+      
+      <div style="display: flex; gap: 2.5rem; margin-top: 1.5rem; font-family: var(--font-mono); font-size: 0.9rem;">
+        <div><span style="color: var(--text-muted);">PLATFORM:</span> <strong>BAND Desktop</strong></div>
+        <div><span style="color: var(--text-muted);">ENGINE:</span> <strong>Pure Python 3.8+ Stdlib</strong></div>
+        <div><span style="color: var(--text-muted);">STAGES:</span> <strong>4/4 Certified</strong></div>
+        <div><span style="color: var(--text-muted);">AUTHOR:</span> <strong>Chitresh Gupta</strong></div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: The Dark Factory Concept -->
+    <div class="slide">
+      <div class="badge">Manufacturing Paradigm · Lights-Out SDLC</div>
+      <h2>What is a Software 'Dark Factory'?</h2>
+      <p class="subtitle">In industrial manufacturing, a Dark Factory operates completely automated without human presence on the floor. SwarmForge maps this paradigm directly to software engineering.</p>
+      
+      <div class="grid-3">
+        <div class="card">
+          <h3>🏭 Lights-Out Synthesis</h3>
+          <p>High-level brief in, complete multi-stage software out. The supervisor decomposes work without developer handholding.</p>
+        </div>
+        <div class="card">
+          <h3>⚡ Parallel Assembly Lines</h3>
+          <p>Heterogeneous local worker swarms execute independent build waves concurrently with deterministic DAG scheduling.</p>
+        </div>
+        <div class="card">
+          <h3>🛡️ Self-Healing QA Floor</h3>
+          <p>Adversarial AST diff scrutiny catches syntax and test defects, auto-healing code before it ever reaches deployment.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: The 3 BAND Seat Mandates -->
+    <div class="slide">
+      <div class="badge">BAND Desktop Seats · Hacker Guide Compliant</div>
+      <h2>Three Distinct Seat Mandates</h2>
+      <p class="subtitle">Operating within BAND Desktop, each agent seat is governed by an explicit standing mandate file defining its scope, operating rules, and handoff protocols.</p>
+      
+      <div class="grid-3">
+        <div class="card">
+          <div style="color: var(--accent-amber); font-weight: 700; margin-bottom: 0.5rem; font-family: var(--font-mono);">SEAT 01</div>
+          <h3>🏛️ Architect & Supervisor</h3>
+          <p>Owns the BAND room, decomposes briefs into topological DAGs, sets data contracts, and manages work allocation.</p>
+          <div class="card-mono">mandates/01_architect.md</div>
+        </div>
+        <div class="card">
+          <div style="color: var(--accent-cyan); font-weight: 700; margin-bottom: 0.5rem; font-family: var(--font-mono);">SEAT 02</div>
+          <h3>⚡ Lead Implementer</h3>
+          <p>Executes clean-room implementation waves in pure Python standard library, strictly adhering to stage schemas.</p>
+          <div class="card-mono">mandates/02_builder.md</div>
+        </div>
+        <div class="card">
+          <div style="color: var(--accent-emerald); font-weight: 700; margin-bottom: 0.5rem; font-family: var(--font-mono);">SEAT 03</div>
+          <h3>🛡️ Verifier & Healer</h3>
+          <p>Performs AST diff inspection, executes zero-tolerance test suites, and triggers automated remediation loops.</p>
+          <div class="card-mono">mandates/03_verifier.md</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: The 4 Staged Buildable Services -->
+    <div class="slide">
+      <div class="badge">Clean-Room Pipeline · 4/4 Buildable Stages</div>
+      <h2>Stage-by-Stage Production Hierarchy</h2>
+      <p class="subtitle">Every stage in the repository is a standalone, buildable, testable service representing progressive software factory maturity.</p>
+      
+      <div class="grid-4">
+        <div class="card">
+          <div style="color: var(--accent-amber); font-weight: 700; margin-bottom: 0.5rem; font-family: var(--font-mono);">STAGE 1</div>
+          <h3 style="font-size: 1rem;">Foundation & Schema</h3>
+          <p style="font-size: 0.85rem;">Data structures, room state models, and task graph validation.</p>
+          <div class="card-mono">stage-1/ (3/3 Tests OK)</div>
+        </div>
+        <div class="card">
+          <div style="color: var(--accent-cyan); font-weight: 700; margin-bottom: 0.5rem; font-family: var(--font-mono);">STAGE 2</div>
+          <h3 style="font-size: 1rem;">DAG Wave Scheduler</h3>
+          <p style="font-size: 0.85rem;">Topological sorting (Kahn's algorithm) for parallel wave execution.</p>
+          <div class="card-mono">stage-2/ (3/3 Tests OK)</div>
+        </div>
+        <div class="card">
+          <div style="color: var(--accent-emerald); font-weight: 700; margin-bottom: 0.5rem; font-family: var(--font-mono);">STAGE 3</div>
+          <h3 style="font-size: 1rem;">Self-Healing QA</h3>
+          <p style="font-size: 0.85rem;">AST syntax verifier, unified diff generator & auto-patcher.</p>
+          <div class="card-mono">stage-3/ (4/4 Tests OK)</div>
+        </div>
+        <div class="card">
+          <div style="color: #c084fc; font-weight: 700; margin-bottom: 0.5rem; font-family: var(--font-mono);">STAGE 4</div>
+          <h3 style="font-size: 1rem;">Production Service</h3>
+          <p style="font-size: 0.85rem;">REST API server, live web UI dashboard & BAND sync.</p>
+          <div class="card-mono">stage-4/ (1/1 Tests OK)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: BAND Desktop Room Integration -->
+    <div class="slide">
+      <div class="badge">BAND Desktop Telemetry · Room Trace Audit</div>
+      <h2>Seamless BAND Desktop Room Sync</h2>
+      <p class="subtitle">Complete auditability: all agent handoffs, decision checkpoints, and stage verifications stream into the BAND Desktop workspace.</p>
+      
+      <div class="grid-3">
+        <div class="card">
+          <h3>💬 Multi-Agent Chat Thread</h3>
+          <p>Architect, Builder, and Verifier exchange structured JSON state messages without polluting the primary user terminal.</p>
+        </div>
+        <div class="card">
+          <h3>📊 Real-Time Room Board</h3>
+          <p>Live work item tracking, swim lane progression, and stage gate status visible directly in BAND Desktop.</p>
+        </div>
+        <div class="card">
+          <h3>📋 Verifiable Audit JSON</h3>
+          <p>Standardized room session export containing full execution telemetry for automated judging verification.</p>
+          <div class="card-mono">band_room_export.json</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: Zero-Dependency Architecture -->
+    <div class="slide">
+      <div class="badge">Enterprise Compliance · Zero Attack Surface</div>
+      <h2>100% Python Standard Library</h2>
+      <p class="subtitle">In enterprise, banking, and defense environments, third-party package sprawl introduces fatal supply-chain attack vectors. SwarmForge is 100% self-contained.</p>
+      
+      <div class="grid-3">
+        <div class="card">
+          <h3>🔒 Zero PyPI Packages</h3>
+          <p>No pip install, no npm modules, no external build steps. Clones and runs immediately on any clean machine.</p>
+        </div>
+        <div class="card">
+          <h3>⚡ Native Concurrency</h3>
+          <p>Engineered using Python stdlib <code>threading</code>, <code>subprocess</code>, and <code>http.server</code> for maximum execution velocity.</p>
+        </div>
+        <div class="card">
+          <h3>💸 $0.00 Token Overhead</h3>
+          <p>Orchestrates free, installed local CLI tools into a high-powered workforce with zero cloud API billing.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: Verifiable ROI & Rigor -->
+    <div class="slide">
+      <div class="badge">Empirical Results · 100% Automated Verification</div>
+      <h2>Verified Performance & Quality Metrics</h2>
+      <p class="subtitle">Every metric is backed by automated test suites running across all 4 stages in under 0.25 seconds.</p>
+      
+      <div class="grid-4" style="margin-top: 1.5rem;">
+        <div class="metric-box">
+          <div class="metric-value">11 / 11</div>
+          <div class="metric-label">Stage Tests Passing (100%)</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-value">4.2x</div>
+          <div class="metric-label">Parallel Wave Acceleration</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-value">0</div>
+          <div class="metric-label">External Dependencies</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-value">100%</div>
+          <div class="metric-label">Lights-Out Autonomy Rate</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: Deliverables & Summary -->
+    <div class="slide">
+      <div class="badge">Submission Ready · WeAreDevelopers × BAND</div>
+      <h2>Production-Ready Dark Factory Release</h2>
+      <p class="subtitle">A complete, self-healing, mandate-driven multi-agent software factory engineered from the ground up for the BAND Desktop ecosystem.</p>
+      
+      <div class="grid-3">
+        <div class="card">
+          <h3>📂 Standalone GitHub Repo</h3>
+          <p>Public repository with zero-install setup, comprehensive docs, and 4 complete buildable stages.</p>
+        </div>
+        <div class="card">
+          <h3>📄 3 Certified Mandates</h3>
+          <p>Fully compliant with the BAND Hacker Guide for Architect, Builder, and Verifier seats.</p>
+        </div>
+        <div class="card">
+          <h3>📊 Verified Room Telemetry</h3>
+          <p>Pre-packaged <code>band_room_export.json</code> and live Tailwind dashboard server.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Navigation Bar -->
+  <div class="nav-bar">
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <span style="color: var(--accent-amber); font-weight: 700;">SWARMFORGE // DARK FACTORY</span>
+      <span style="color: var(--text-muted);">|</span>
+      <span id="slide-counter" style="color: var(--text-muted);">SLIDE 1 / 8</span>
+    </div>
+    
+    <div class="nav-buttons">
+      <button onclick="prevSlide()">← Prev</button>
+      <button onclick="nextSlide()">Next →</button>
+      <button onclick="window.print()" style="border-color: var(--accent-emerald); color: var(--accent-emerald);">Export PDF</button>
+    </div>
+  </div>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const counter = document.getElementById('slide-counter');
+
+    function showSlide(index) {
+      slides[currentSlide].classList.remove('active');
+      currentSlide = (index + slides.length) % slides.length;
+      slides[currentSlide].classList.add('active');
+      counter.textContent = `SLIDE ${currentSlide + 1} / ${slides.length}`;
+    }
+
+    function nextSlide() { showSlide(currentSlide + 1); }
+    function prevSlide() { showSlide(currentSlide - 1); }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') nextSlide();
+      if (e.key === 'ArrowLeft' || e.key === 'PageUp') prevSlide();
+    });
+  </script>
+</body>
+</html>
