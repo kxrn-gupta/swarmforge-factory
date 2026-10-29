@@ -1,7 +1,7 @@
 # ⚒️ SwarmForge — The Autonomous 'Dark Factory' for Software Engineering
 
 > 🏆 **Dark Factory Edition** · **Zero-Cost Multi-Agent Orchestrator** · **No API Keys** · **Zero Dependencies**  
-> **Author / Maintainer:** Chitresh Gupta (Karan / Kxrn) · [GitHub Profile](https://github.com/karan5028ji) · [Portfolio](https://kxrn.is-a.dev/)
+> **Author / Maintainer:** Chitresh Gupta (Karan / Kxrn) · [GitHub Profile](https://github.com/kxrn-gupta) · [Portfolio](https://kxrn.is-a.dev/)
 
 ---
 
@@ -133,7 +133,7 @@ Every run captures pre-build and post-fix AST snapshots, producing Git-style uni
 **Python 3.8+ is the only requirement.** Every tool is detected or auto-installed for you.
 
 ```bash
-git clone https://github.com/karan5028ji/swarmforge.git && cd SwarmForge
+git clone https://github.com/kxrn-gupta/swarmforge.git && cd SwarmForge
 python forge.py --auto-install                        # installs every missing CLI companion
 python forge.py "Build a todo web app" --serve        # dashboard opens at 127.0.0.1:8787
 ```
@@ -458,4 +458,4 @@ This project is maintained and developed by **Kxrn** — an independent software
 
 🌐 **Explore my ecosystem:**
 - **Developer Portfolio:** [kxrn.is-a.dev](https://kxrn.is-a.dev/)
-- **GitHub Profile:** [@karan5028ji](https://github.com/karan5028ji)
+- **GitHub Profile:** [@kxrn-gupta](https://github.com/kxrn-gupta)
